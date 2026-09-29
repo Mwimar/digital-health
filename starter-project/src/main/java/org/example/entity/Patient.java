@@ -11,6 +11,7 @@ import org.example.entity.enums.Gender;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -24,8 +25,8 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String identifier;
+    @Column(nullable = false, unique = true, updatable = false)
+    private UUID identifier;
 
     @Column(nullable = false)
     private String givenName;
