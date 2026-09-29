@@ -1,19 +1,20 @@
 package org.example.service;
 
 import org.example.dto.PatientDTO;
-import org.springframework.stereotype.Service;
+import org.example.entity.Patient;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-@Service
 public interface PatientService {
-    List<PatientDTO> findAllPatients();
+
+    Optional<PatientDTO> findPatientById(Long id);
 
     PatientDTO savePatient(PatientDTO patientDTO);
 
-    PatientDTO updatePatientById(Long id);
+    PatientDTO updatePatientById(Long id, PatientDTO patientDTO);
 
     PatientDTO deletePatientById(Long id);
 

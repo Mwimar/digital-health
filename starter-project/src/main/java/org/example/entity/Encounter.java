@@ -25,14 +25,14 @@ public class Encounter {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
             name = "patient_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk_encounter_patient")
+            nullable = false
     )
     private Patient patient;
 
-    @Column(nullable = false)
+    @Column(name="start_time", nullable = false)
     private LocalDateTime start;
 
+    @Column(name="end_time", nullable = false)
     private LocalDateTime end;
 
     @Enumerated(EnumType.STRING)

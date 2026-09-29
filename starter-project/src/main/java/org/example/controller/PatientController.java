@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.EncounterDTO;
 import org.example.dto.ObservationDTO;
@@ -11,11 +10,13 @@ import org.example.service.EncounterService;
 import org.example.service.ObservationService;
 import org.example.service.PatientService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -29,14 +30,14 @@ public class PatientController {
 
     //PATIENTS CRUD OPERATIONS
 
-    @GetMapping()
-    public ResponseEntity<List<PatientDTO>> getPatients() {
-        List<PatientDTO> patientsList = patientService.findAllPatients();
-        return ResponseEntity.ok(patientsList);
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<PatientDTO>> getPatient(@PathVariable Long id) {
+        Optional<PatientDTO> patient = patientService.findPatientById(id);
+        return ResponseEntity.ok(patient);
 
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<PatientDTO> addPatient(@RequestBody PatientDTO patientDTO) {
         PatientDTO savedPatient = patientService.savePatient(patientDTO);
         return ResponseEntity.ok(savedPatient);
@@ -44,8 +45,8 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id) {
-        PatientDTO updatedPatient = patientService.updatePatientById(id);
+    public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, @RequestBody PatientDTO patientDTO) {
+        PatientDTO updatedPatient = patientService.updatePatientById(id, patientDTO);
         return ResponseEntity.ok(updatedPatient);
     }
 
@@ -78,15 +79,48 @@ public class PatientController {
 
     @GetMapping("/{id}/encounters")
     public ResponseEntity<List<EncounterDTO>> getPatientEncounters(@PathVariable Long id){
-        List<EncounterDTO> patientEncounters = encounterService.findBy(id);
+        List<EncounterDTO> patientEncounters = encounterService.findByPatientId(id);
         return ResponseEntity.ok(patientEncounters);
     }
 
-    @GetMapping("/{id}/observations")
-    public ResponseEntity<List<ObservationDTO>> getPatientObservations(@PathVariable Long id){
-        List<ObservationDTO> patientObservations = observationService.findById(id);
-        return ResponseEntity.ok(patientObservations);
+    @PostMapping("/{id}/encounters")
+    public ResponseEntity<EncounterDTO> addPatientEncounter(
+            @PathVariable Long id,
+            @RequestBody EncounterDTO encounterDTO) {
+
+        EncounterDTO patientEncounter =
+                encounterService.createEncounter(id, encounterDTO);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(patientEncounter);
     }
 
+
+    @GetMapping("/{id}/observations")
+    public ResponseEntity<List<ObservationDTO>> getPatientObservations(
+            @PathVariable Long id) {
+
+        List<ObservationDTO> observations =
+                observationService.findByPatientId(id);
+
+        return ResponseEntity.ok(observations);
+    }
+
+    @PostMapping("/{id}/observations")
+    public ResponseEntity<ObservationDTO> addPatientObservation(
+            @PathVariable Long id,
+            @RequestBody ObservationDTO observationDTO) {
+
+        ObservationDTO savedObservation =
+                observationService.addObservation(
+                        id,
+                        observationDTO
+                );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(savedObservation);
+    }
 
 }

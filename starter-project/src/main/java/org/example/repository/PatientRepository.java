@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import org.example.dto.PatientDTO;
 import org.example.entity.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 public interface PatientRepository extends JpaRepository <Patient, Long>{
 
-    Optional<Patient> findPatientById(Long id);
+//    Optional<PatientDTO> findById(Long id);
     Optional<Patient> findPatientByIdentifier(UUID identifier);
 
     @Query("""

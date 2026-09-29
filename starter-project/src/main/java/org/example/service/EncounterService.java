@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface EncounterService {
-    List<EncounterDTO> findBy(Long id);
+    List<EncounterDTO> findByPatientId(Long id);
+
+    EncounterDTO createEncounter(Long id, EncounterDTO encounterDTO);
 }

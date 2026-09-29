@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface ObservationService {
-    List<ObservationDTO> findById(Long id);
+
+
+    List<ObservationDTO> findByPatientId(Long id);
+
+    ObservationDTO addObservation(Long id, ObservationDTO observationDTO);
 }
