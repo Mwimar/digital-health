@@ -45,6 +45,48 @@ public class EncounterServiceImpl implements EncounterService {
         return mapToEncounterDTO(savedEncounter);
     }
 
+    @Override
+    public EncounterDTO updateEncounterById(
+            Long id,
+            EncounterDTO encounterDTO) {
+
+        Encounter encounter = encounterRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Encounter not found with id: " + id)
+                );
+
+        encounter.setStart(encounterDTO.getStart());
+        encounter.setEnd(encounterDTO.getEnd());
+        encounter.setEncounterClass(encounterDTO.getEncounterClass());
+
+        Encounter updatedEncounter = encounterRepository.save(encounter);
+
+        return mapToEncounterDTO(updatedEncounter);
+    }
+
+    @Override
+    public EncounterDTO deleteEncounterById(Long id) {
+
+        Encounter encounter = encounterRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Encounter not found with id: " + id
+                        )
+                );
+
+        if (!encounter.getObservations().isEmpty()) {
+            throw new IllegalStateException(
+                    "Encounter cannot be deleted because it has associated observations"
+            );
+        }
+
+        EncounterDTO deletedEncounter = mapToEncounterDTO(encounter);
+
+        encounterRepository.delete(encounter);
+
+        return deletedEncounter;
+    }
+
     private EncounterDTO mapToEncounterDTO(Encounter encounter) {
         EncounterDTO dto = new EncounterDTO();
 

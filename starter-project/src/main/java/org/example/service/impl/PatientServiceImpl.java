@@ -5,6 +5,8 @@ import org.example.dto.PatientDTO;
 import org.example.entity.Patient;
 import org.example.repository.PatientRepository;
 import org.example.service.PatientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,15 +20,35 @@ public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
 
 
-//    @Override
-//    public Optional<PatientDTO> findPatientById(Long id) {
-//        return patientRepository.findById(id);
-//    }
+
 
     @Override
     public Optional<PatientDTO> findPatientById(Long id) {
         return patientRepository.findById(id)
                 .map(this::mapToPatientDTO);
+    }
+
+    @Override
+    public Page<PatientDTO> searchPatients(
+            String family,
+            String given,
+            String identifier,
+            LocalDate birthDate,
+            Pageable pageable) {
+
+        UUID identifierUuid = null;
+
+        if (identifier != null && !identifier.isBlank()) {
+            identifierUuid = UUID.fromString(identifier);
+        }
+
+        return patientRepository.searchPatient(
+                family,
+                given,
+                identifierUuid,
+                birthDate,
+                pageable
+        ).map(this::mapToPatientDTO);
     }
 
     @Override

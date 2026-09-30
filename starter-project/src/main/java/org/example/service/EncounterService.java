@@ -9,4 +9,8 @@ public interface EncounterService {
     List<EncounterDTO> findByPatientId(Long id);
 
     EncounterDTO createEncounter(Long id, EncounterDTO encounterDTO);
+
+    EncounterDTO updateEncounterById(Long id, EncounterDTO encounterDTO);
+
+    EncounterDTO deleteEncounterById(Long id);
 }
