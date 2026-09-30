@@ -68,20 +68,9 @@ public class PatientController extends BaseController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate birthDate,
 
-            @PageableDefault(
-                    size = 10,
-                    sort = "familyName",
-                    direction = Sort.Direction.ASC
-            )
-            Pageable pageable) {
+            @PageableDefault( size = 10, sort = "familyName", direction = Sort.Direction.ASC ) Pageable pageable) {
 
-        Page<PatientDTO> patients = patientService.searchPatients(
-                family,
-                given,
-                identifier,
-                birthDate,
-                pageable
-        );
+        Page<PatientDTO> patients = patientService.searchPatients( family, given, identifier, birthDate, pageable );
 
         return successResponse(
                 patients,

@@ -1,6 +1,7 @@
 package org.example.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.common.exception.ResourceNotFoundException;
 import org.example.dto.EncounterDTO;
 import org.example.entity.Encounter;
 import org.example.entity.Patient;
@@ -18,19 +19,33 @@ public class EncounterServiceImpl implements EncounterService {
     private final PatientRepository patientRepository;
 
     @Override
-    public List<EncounterDTO> findByPatientId(Long id) {
-        return encounterRepository.findEncounterByPatientId(id)
+    public List<EncounterDTO> findByPatientId(Long patientId) {
+
+        // First verify that the patient exists
+        patientRepository.findById(patientId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Patient not found with id: " + patientId
+                        )
+                );
+
+        // Patient exists, so an empty list is a valid response
+        return encounterRepository.findEncounterByPatientId(patientId)
                 .stream()
                 .map(this::mapToEncounterDTO)
                 .toList();
     }
 
     @Override
-    public EncounterDTO createEncounter(Long patientId, EncounterDTO encounterDTO) {
+    public EncounterDTO createEncounter(
+            Long patientId,
+            EncounterDTO encounterDTO) {
 
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() ->
-                        new RuntimeException("Patient not found with id: " + patientId)
+                        new ResourceNotFoundException(
+                                "Patient not found with id: " + patientId
+                        )
                 );
 
         Encounter encounter = new Encounter();
@@ -52,7 +67,9 @@ public class EncounterServiceImpl implements EncounterService {
 
         Encounter encounter = encounterRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Encounter not found with id: " + id)
+                        new ResourceNotFoundException(
+                                "Encounter not found with id: " + id
+                        )
                 );
 
         encounter.setStart(encounterDTO.getStart());
@@ -69,7 +86,7 @@ public class EncounterServiceImpl implements EncounterService {
 
         Encounter encounter = encounterRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Encounter not found with id: " + id
                         )
                 );
