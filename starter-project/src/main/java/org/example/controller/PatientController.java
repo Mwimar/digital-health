@@ -1,6 +1,7 @@
 
 package org.example.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequestMapping("/api/patients")
 @Slf4j
 @AllArgsConstructor
+@SecurityRequirement(name = "apiKey")
 public class PatientController extends BaseController {
 
     private final PatientService patientService;

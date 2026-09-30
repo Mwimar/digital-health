@@ -23,8 +23,11 @@ public class ApiKeyFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        // Allow H2 console
-        if (request.getRequestURI().startsWith("/h2-console")) {
+        // Allow H2 console and swagger-ui
+        if (request.getRequestURI().startsWith("/h2-console")
+                || request.getRequestURI().startsWith("/swagger-ui")
+                || request.getRequestURI().startsWith("/v3/api-docs")) {
+
             filterChain.doFilter(request, response);
             return;
         }
