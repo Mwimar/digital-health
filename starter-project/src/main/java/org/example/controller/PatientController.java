@@ -57,14 +57,11 @@ public class PatientController extends BaseController {
      */
     @GetMapping("/search")
     public ResponseEntity<GenericApiResponse<Page<PatientDTO>>> getPatients(
-            @RequestParam(required = false)
-            String family,
+            @RequestParam(required = false) String family,
 
-            @RequestParam(required = false)
-            String given,
+            @RequestParam(required = false) String given,
 
-            @RequestParam(required = false)
-            String identifier,
+            @RequestParam(required = false) String identifier,
 
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -106,7 +103,6 @@ public class PatientController extends BaseController {
 
     /**
      * Create patient.
-     *
      * POST /api/patients
      */
     @PostMapping

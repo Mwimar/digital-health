@@ -28,5 +28,4 @@ public interface PatientService {
 
     PatientDTO deletePatientById(Long id);
 
-    List<PatientDTO> search(String familyName, String givenName, UUID identifier, LocalDate birthDate);
 }

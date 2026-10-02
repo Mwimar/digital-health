@@ -111,8 +111,5 @@ public class PatientServiceImpl implements PatientService {
         return deletedPatient;
     }
 
-    @Override
-    public List<PatientDTO> search(String familyName, String givenName, UUID identifier, LocalDate birthDate) {
-        return List.of();
-    }
+
 }
